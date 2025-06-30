@@ -1,0 +1,101 @@
+<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+<script src="https://raw.githack.com/fcor/arjs-gestures/master/dist/gestures.js"></script>
+<script>
+window.onload = function() {
+        AFRAME.registerComponent('soundhandler', {
+            init: function () {
+                var marker = this.el;
+
+                this.sound = document.querySelector("#sound");
+
+                marker.addEventListener('markerFound', function () {
+                    this.sound.play();
+                }.bind(this));
+    
+        marker.addEventListener('markerLost', function() {
+            this.sound.pause();
+            this.sound.currentTime = 0;
+        }.bind(this));
+            }
+        });
+    };
+</script>
+<script>
+            AFRAME.registerComponent('videohandler', {
+                init: function () {
+                    var marker = this.el;
+                    this.vid = document.querySelector("Compass-gun-sword-telescope");
+
+                    marker.addEventListener('markerFound', function () {
+                        this.toggle = true;
+                        this.vid.play();
+                    }.bind(this));
+
+                    marker.addEventListener('markerLost', function () {
+                        this.toggle = false;
+                        this.vid.pause();
+                    }.bind(this));
+                },
+            });
+        </script>
+<style>
+  .arjs-loader {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .arjs-loader div {
+    text-align: center;
+    font-size: 1.25em;
+    color: white;
+  }
+</style>
+<body style="margin: 0px; overflow: hidden">
+  <!-- minimal loader shown until image descriptors are loaded -->
+  <div class="arjs-loader">
+    <div>명함 앞과 뒤를 인식해주세요</div>
+  </div>
+<a-scene
+  cursor="rayOrigin: mouse"
+  vr-mode-ui="enabled: false;"
+  renderer="logarithmicDepthBuffer: true; precision: high; antialias: true; alpha: true; pixelRatio: 2; preserveDrawingBuffer: true;"
+  arjs="trackingMethod: best; sourceType: webcam; canvasWidth: 1920; canvasHeight: 1080;"
+  embedded
+  gesture-detector
+  id="scene">
+<a-assets>
+    <video id="Compass" src="https://raw.githubusercontent.com/hospitalVIP/jack/main/mvi/Compass.mp4" preload="auto" response-type="arraybuffer" loop crossorigin webkit-playsinline autoplay muted playsinline></video>
+    <video id="gun" src="https://raw.githubusercontent.com/hospitalVIP/jack/main/mvi/gun.mp4" preload="auto" response-type="arraybuffer" loop crossorigin webkit-playsinline autoplay muted playsinline></video>
+    <video id="sword" src="https://raw.githubusercontent.com/hospitalVIP/jack/main/mvi/sword.mp4" preload="auto" response-type="arraybuffer" loop crossorigin webkit-playsinline autoplay muted playsinline></video>
+    <video id="telescope" src="https://raw.githubusercontent.com/hospitalVIP/jack/main/mvi/telescope.mp4" preload="auto" response-type="arraybuffer" loop crossorigin webkit-playsinline autoplay muted playsinline></video>
+    <audio id="sound" src="https://raw.githubusercontent.com/hospitalVIP/jack/main/black/He s a Pirate.mp3" preload="auto"></audio>
+</a-assets>
+
+<a-nft soundhandler type="nft" url="https://raw.githubusercontent.com/hospitalVIP/jack/main/output/rogoqr" smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5" raycaster="objects: .clickable" emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
+    <a-box position="0 0.5 0" material="color: black;" soundhandler></a-box>
+    <a-entity gltf-model="https://raw.githubusercontent.com/hospitalVIP/jack/main/black/black.glb" scale="2 2 2" sound="src: #sound" autoplay="false" position="100 -20 -115" class="clickable" gesture-handler="minScale: 0.25; maxScale: 10"></a-entity>
+</a-nft>
+
+<a-nft videohandler type="nft" url="https://raw.githubusercontent.com/hospitalVIP/jack/main/mapout/map" smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">
+    <a-video src="#Compass" scale="20 20 20" position="37 0 -14.5" rotation="90 0 -180" play="true"></a-video>
+    <a-video src="#gun" scale="20 20 20" position="37.5 0 -65.7" rotation="90 0 -180" play="true"></a-video>
+    <a-video src="#sword" scale="20 20 20" position="9.5 0 -65.7" rotation="-90 0 0" play="true"></a-video>
+    <a-video src="#telescope" scale="20 20 20" position="10 0 -14.5" rotation="-90 0 0" play="true"></a-video>
+    <a-entity id="mouseCursor" cursor="rayOrigin: mouse; fuseTimeout: 0" raycaster="objects: .raycastable"></a-entity>
+    <a-entity clicker gltf-model="https://raw.githubusercontent.com/hospitalVIP/jack/main/black/Compass.glb" scale="2 2 2" position="40 -30 -28"></a-entity>
+    <a-entity clicker gltf-model="https://raw.githubusercontent.com/hospitalVIP/jack/main/black/gun.glb" scale="14 10 10" position="20 -30 -40" rotation="0 30 0"></a-entity>
+    <a-entity clicker gltf-model="https://raw.githubusercontent.com/hospitalVIP/jack/main/black/sword.glb" scale="2 2 2" position="30 -30 -44" rotation="0 -40 180"></a-entity>
+    <a-entity clicker gltf-model="https://raw.githubusercontent.com/hospitalVIP/jack/main/black/telescope.glb" scale="8 8 8" position="12 -30 -25"></a-entity>
+    <a-entity clicker gltf-model="https://raw.githubusercontent.com/hospitalVIP/jack/main/black/coin.glb" scale="2 2 2" position="-5 -30 -48" rotation="-18 30 0"></a-entity>
+</a-nft>
+<a-entity camera></a-entity>
+</a-scene>
+</body>
